@@ -27,31 +27,32 @@ const navigation = (): VerticalNavItemsType => {
         //   path: '/dashboards/ecommerce'
         // }
       ]
-    },
-    {
-      sectionTitle: 'Apps & Pages'
-    },
+    }
+
+    // {
+    //   sectionTitle: 'Apps & Pages'
+    // },
 
     // {
     //   title: 'Test',
     //   icon: 'mdi:email-outline',
     //   path: '/apps/test'
     // },
-    {
-      title: 'Factory',
-      icon: 'mdi:factory',
-      path: '/apps/factory'
-    },
-    {
-      title: 'Location',
-      icon: 'mdi:location',
-      path: '/apps/location'
-    },
-    {
-      title: 'User',
-      icon: 'mdi:user',
-      path: '/apps/user'
-    }
+    // {
+    //   title: 'Factory',
+    //   icon: 'mdi:factory',
+    //   path: '/apps/factory'
+    // },
+    // {
+    //   title: 'Location',
+    //   icon: 'mdi:location',
+    //   path: '/apps/location'
+    // },
+    // {
+    //   title: 'User',
+    //   icon: 'mdi:user',
+    //   path: '/apps/user'
+    // }
 
     // {
     //   title: 'Email',
