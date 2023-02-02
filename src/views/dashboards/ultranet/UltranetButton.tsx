@@ -13,6 +13,8 @@ import { DateType } from 'src/types/forms/reactDatepickerTypes'
 import format from 'date-fns/format'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 
+import { useSnackbar } from 'notistack'
+
 interface CustomInputProps {
   dates: Date[]
   label: string
@@ -35,29 +37,54 @@ const CustomInput = forwardRef((props: CustomInputProps, ref) => {
 })
 
 const UltranetButton = () => {
+  const { enqueueSnackbar } = useSnackbar()
+
   const [dates, setDates] = useState<Date[]>([])
   const [endDateRange, setEndDateRange] = useState<DateType>(null)
   const [startDateRange, setStartDateRange] = useState<DateType>(null)
 
-  const handleCheckin = () => {
-    console.log('Check in')
+  const handleCheckin = async () => {
     UserService.checkin()
+    try {
+      await UserService.checkin()
+      enqueueSnackbar('Checkin success', { variant: 'success' })
+    } catch (error) {
+      enqueueSnackbar('Error', { variant: 'error' })
+    }
   }
 
-  const handleCheckout = () => {
-    console.log('Check out')
-    UserService.checkout()
+  const handleCheckout = async () => {
+    try {
+      await UserService.checkout()
+      enqueueSnackbar('Checkout success', { variant: 'success' })
+    } catch (error) {
+      enqueueSnackbar('Error', { variant: 'error' })
+    }
   }
 
-  const handleExport = () => {
-    if (!startDateRange || !endDateRange) return
-    console.log('Export')
-    UserService.exportExcel({
-      //   start: '2023-02-02',
-      //   end: '2023-02-02'
-      start: format(startDateRange as Date, 'yyyy-MM-dd'),
-      end: format(endDateRange as Date, 'yyyy-MM-dd')
-    })
+  const handleExport = async () => {
+    try {
+      if (!startDateRange || !endDateRange) {
+        enqueueSnackbar('No start date and end date', { variant: 'error' })
+        return
+      }
+      const start = format(startDateRange as Date, 'yyyy-MM-dd')
+      const end = format(endDateRange as Date, 'yyyy-MM-dd')
+      const res: any = await UserService.exportExcel({
+        start,
+        end
+      })
+      // save data to file
+      const blob = new Blob([res], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      })
+      const link = document.createElement('a')
+      link.href = window.URL.createObjectURL(blob)
+      link.download = `export_${start}_${end}.xlsx`
+      link.click()
+    } catch (error) {
+      enqueueSnackbar('Error', { variant: 'error' })
+    }
   }
 
   const handleOnChangeRange = (dates: any) => {
@@ -94,7 +121,7 @@ const UltranetButton = () => {
             <CustomInput
               dates={dates}
               setDates={setDates}
-              label='Invoice Date'
+              label='Export Date'
               end={endDateRange as number | Date}
               start={startDateRange as number | Date}
             />

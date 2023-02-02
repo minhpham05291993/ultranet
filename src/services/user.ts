@@ -78,9 +78,10 @@ const UserService = {
     return axiosInstance({
       method: 'GET',
       url: UserUrl.exportExcel,
+      responseType: 'blob',
       params
     }) as Promise<{
-      Ok: boolean
+      data: any
     }>
   }
 }
