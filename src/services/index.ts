@@ -51,7 +51,7 @@ axiosInstance.interceptors.response.use(
   async function (error) {
     console.log(error)
 
-    if (error.response.status === 401 && error.response.data.detail === 'Token has expired') {
+    if (error.response && error.response.status === 401 && error.response.data.detail === 'Token has expired') {
       const { config } = error
       const originalRequest = config
 

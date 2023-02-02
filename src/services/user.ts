@@ -3,19 +3,22 @@ import { UserType } from 'src/types/apps/userTypes'
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
-const userUrl = {
+const UserUrl = {
   list: `${baseUrl}/user/list`,
   detail: (userId: number) => `${baseUrl}/user/${userId}`,
   update: `${baseUrl}/user/edit`,
   create: `${baseUrl}/user/add`,
-  delete: (userId: number) => `${baseUrl}/user/${userId}`
+  delete: (userId: number) => `${baseUrl}/user/${userId}`,
+  checkin: `${baseUrl}/checkin`,
+  checkout: `${baseUrl}/checkout`,
+  exportExcel: `${baseUrl}/timekeeping/excel`
 }
 
-const userService = {
+const UserService = {
   list: () => {
     return axiosInstance({
       method: 'GET',
-      url: userUrl.list
+      url: UserUrl.list
     }) as Promise<{
       users: UserType[]
     }>
@@ -23,7 +26,7 @@ const userService = {
   detail: (userId: number) => {
     return axiosInstance({
       method: 'GET',
-      url: userUrl.detail(userId)
+      url: UserUrl.detail(userId)
     }) as Promise<{
       user: UserType
     }>
@@ -31,7 +34,7 @@ const userService = {
   update: (data: UserType) => {
     return axiosInstance({
       method: 'PUT',
-      url: userUrl.update,
+      url: UserUrl.update,
       data
     }) as Promise<{
       Ok: boolean
@@ -40,21 +43,46 @@ const userService = {
   create: (data: Omit<UserType, 'id'>) => {
     return axiosInstance({
       method: 'POST',
-      url: userUrl.create,
+      url: UserUrl.create,
       data
     }) as Promise<{
       Ok: boolean
     }>
   },
-  
+
   delete: (userId: number) => {
     return axiosInstance({
       method: 'DELETE',
-      url: userUrl.delete(userId)
+      url: UserUrl.delete(userId)
+    }) as Promise<{
+      Ok: boolean
+    }>
+  },
+  checkin: () => {
+    return axiosInstance({
+      method: 'POST',
+      url: UserUrl.checkin
+    }) as Promise<{
+      Ok: boolean
+    }>
+  },
+  checkout: () => {
+    return axiosInstance({
+      method: 'POST',
+      url: UserUrl.checkout
+    }) as Promise<{
+      Ok: boolean
+    }>
+  },
+  exportExcel: (params: any) => {
+    return axiosInstance({
+      method: 'GET',
+      url: UserUrl.exportExcel,
+      params
     }) as Promise<{
       Ok: boolean
     }>
   }
 }
 
-export default userService
+export default UserService
